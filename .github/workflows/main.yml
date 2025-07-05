@@ -12,7 +12,7 @@ jobs:
           sudo apt update && sudo apt install wget zip -y
 
       - name: Baixar system.img com KernelSU
-        run: wget -O system.img https://waydroid-image-server.surge.sh/system-kernelsu.img
+  run: wget -O system.img https://github.com/KernelSU-Next/KernelSU-Next/releases/download/v1.0.8/android12-5.10.233_2025-02-boot.img.gz && gunzip system.img.gz
 
       - name: Baixar vendor.img
         run: wget -O vendor.img https://waydroid-image-server.surge.sh/vendor.img
