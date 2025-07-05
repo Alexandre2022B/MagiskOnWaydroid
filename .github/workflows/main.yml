@@ -24,7 +24,7 @@ jobs:
         run: zip kernelSU-waydroid.zip system.img vendor.img
 
       - name: Publicar artefatos
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: kernelSU-waydroid
           path: kernelSU-waydroid.zip
