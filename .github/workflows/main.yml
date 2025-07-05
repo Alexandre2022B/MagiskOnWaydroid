@@ -1,0 +1,31 @@
+name: Build WSA
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Generate WSA with KernelSU
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up build environment
+        run: |
+          sudo apt update
+          sudo apt install zip wget curl unzip -y
+
+      - name: Download base image
+        run: |
+          wget https://waydroid-image-server.surge.sh/system-kernelsu.img -O system.img
+          wget https://waydroid-image-server.surge.sh/vendor.img -O vendor.img
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: waydroid-kernelsu-images
+          path: |
+            system.img
+            vendor.img
