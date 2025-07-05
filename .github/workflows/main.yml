@@ -9,21 +9,18 @@ jobs:
     steps:
       - name: Preparar ambiente
         run: |
-          sudo apt update
-          sudo apt install wget zip -y
+          sudo apt update && sudo apt install wget zip -y
 
       - name: Baixar system.img com KernelSU
-        run: |
-          wget -O system.img "https://waydroid-image-server.surge.sh/system-kernelsu.img"
+        run: wget -O system.img https://waydroid-image-server.surge.sh/system-kernelsu.img
 
-      - name: Baixar vendor.img padrão
-        run: |
-          wget -O vendor.img "https://waydroid-image-server.surge.sh/vendor.img"
+      - name: Baixar vendor.img
+        run: wget -O vendor.img https://waydroid-image-server.surge.sh/vendor.img
 
-      - name: Compactar tudo em ZIP
+      - name: Compactar arquivos
         run: zip kernelSU-waydroid.zip system.img vendor.img
 
-      - name: Publicar artefatos
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: kernelSU-waydroid
