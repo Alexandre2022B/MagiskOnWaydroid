@@ -14,10 +14,9 @@ jobs:
           sudo apt install wget zip gzip -y
 
       - name: Baixar boot.img KernelSU (versão fixa confiável)
-        run: |
-          wget -O boot.img.gz "https://github.com/KernelSU-Next/KernelSU-Next/releases/download/v1.0.8/android12-5.10.233_2025-02-boot.img.gz"
-          gunzip boot.img.gz
-          mv boot.img system.img
+        run: | wget -O boot.img.gz "https://github.com/KernelSU-Next/KernelSU-Next/releases/download/v1.0.8/android12-5.10.233_2025-02-boot.img.gz"
+    gunzip boot.img.gz
+    mv boot.img system.img
 
       - name: Baixar vendor.img estável
         run: | wget -O vendor.img "https://github.com/waydroid-root/images/releases/latest/download/vendor.img"
