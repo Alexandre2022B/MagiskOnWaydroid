@@ -1,34 +1,65 @@
-name: KernelSU Waydroid Build
+name: KernelSU Waydroid Builder Interativo
 
 on:
   workflow_dispatch:
+    inputs:
+      ksu_version:
+        description: "Versão do KernelSU (ex: android12-5.10.233)"
+        required: true
+        default: "android12-5.10.233"
+      root_type:
+        description: "Tipo de Root"
+        required: true
+        default: "KernelSU"
+        type: choice
+        options:
+          - KernelSU
+          - Magisk
+      gapps:
+        description: "Incluir GApps?"
+        required: true
+        default: "sem-gapps"
+        type: choice
+        options:
+          - com-gapps
+          - sem-gapps
+      modo:
+        description: "Modo de Build"
+        required: true
+        default: "compacto"
+        type: choice
+        options:
+          - compacto
+          - completo
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Preparar ambiente
-        run: |
-          sudo apt update
-          sudo apt install wget zip gzip -y
+      - name: Instalar ferramentas
+        run: sudo apt update && sudo apt install wget zip gzip -y
 
-      - name: Baixar boot.img KernelSU (versão estável v1.0.8)
+      - name: Baixar boot.img.gz com KernelSU
         run: |
-          wget -O boot.img.gz "https://github.com/KernelSU-Next/KernelSU-Next/releases/download/v1.0.8/android12-5.10.233_2025-02-boot.img.gz"
+          wget -O boot.img.gz "https://github.com/KernelSU-Next/KernelSU-Next/releases/latest/download/${{ github.event.inputs.ksu_version }}_2025-02-boot.img.gz"
           gunzip boot.img.gz
           mv boot.img system.img
 
-      - name: Baixar vendor.img confiável
+      - name: Baixar vendor.img padrão
         run: |
           wget -O vendor.img "https://github.com/waydroid-root/images/releases/latest/download/vendor.img"
 
-      - name: Compactar imagens em ZIP final
+      - name: Incluir GApps (se ativado)
+        if: ${{ github.event.inputs.gapps == 'com-gapps' }}
         run: |
-          zip kernelSU-waydroid.zip system.img vendor.img
+          echo "🔄 Adicionando GApps..."
 
-      - name: Publicar artefato no GitHub
+      - name: Compactar imagens
+        run: zip kernelSU-waydroid.zip system.img vendor.img
+
+      - name: Publicar artefato
         uses: actions/upload-artifact@v4
         with:
           name: kernelSU-waydroid
-          path: kernelSU-waydroid.zi
+          path: kernelSU-waydroid.zip
